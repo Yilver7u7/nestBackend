@@ -97,6 +97,11 @@ export class AuthService {
     }
 
   }
+
+  async loginResponseTarea( checkToken: LoginResponse ){
+    console.log('fine')
+  }
+
 //Nos genera un Token
   getJwtToken( payload: JwtPayload ){
     const token = this.jwtService.sign(payload);
