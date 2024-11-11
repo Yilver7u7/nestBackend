@@ -5,12 +5,13 @@ import { InjectModel } from '@nestjs/mongoose';
 // Encriptdor
 import * as bcrypt from 'bcryptjs';
 
-import { UpdateAuthDto } from './dto/update-auth.dto';
-import { CreateUserDto } from './dto/create-userdto';
+
 import { User } from './entities/user.entity';
-import { LoginDto } from './dto/login-dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './interfces/jwt-payload';
+import { LoginResponse } from './interfces/login-response';
+//Importar todos los DTO
+import { CreateUserDto, LoginDto, RegisterDto, UpdateAuthDto } from './dto';
 
 
 @Injectable()
@@ -59,9 +60,22 @@ export class AuthService {
     //Todo 4 - Manejo de errores
   }
 
+  async register( registerUser: RegisterDto ): Promise<LoginResponse>{
+
+    const user = await this.create(registerUser);
+
+    return{
+      user: user,
+      token: this.getJwtToken({ id: user._id})
+
+    }
+
+  }
+
+
   // Usulmente hacemos la avalida de que se encuentre el usuario en la base de datos
   // Y con base en ello generamos y entregamos su JWT
-  async login( loginDto: LoginDto){
+  async login( loginDto: LoginDto): Promise<LoginResponse>{
     const { email, password } =loginDto;
 
     const user = await this.userModel.findOne({ email })
@@ -78,13 +92,13 @@ export class AuthService {
 
     return{
       user: rest,
-      toke: this.getJwtToken( {id: user.id} ),
+      token: this.getJwtToken( {id: user.id} ),
       // token: 'ABC-123'
     }
 
   }
 //Nos genera un Token
-  getJwtToken( payload: JwtPayload){
+  getJwtToken( payload: JwtPayload ){
     const token = this.jwtService.sign(payload);
     return token;
   }

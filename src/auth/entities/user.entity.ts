@@ -3,6 +3,8 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 //Es el Schema de la tabla
 @Schema()
 export class User {
+    //Algunos user tendran el id => JWT
+    _id?: string;
 
     //De esta forma nos aseguramos de decirle que va a poder guardar
     //Objetos que luzcan de la siguiente manera en la base de datos
