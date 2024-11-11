@@ -103,6 +103,13 @@ export class AuthService {
     return token;
   }
 
+  async findUserById( id: string ){
+    const user = await this.userModel.findById( id );
+
+    const { password, ...rest } = user.toJSON();
+    return rest;
+  }
+
   findAll() {
     return `This action returns all auth`;
   }
