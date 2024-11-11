@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    //Configuracion de las variables de entorno para este modulo
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGO_URL),
     AuthModule
